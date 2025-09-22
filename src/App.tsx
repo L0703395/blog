@@ -48,7 +48,11 @@ const LeafGraphic: React.FC<{ style?: React.CSSProperties }> = ({ style }) => (
 );
 
 // Use uploaded seasonal image (place file in /public/backgrounds)
-const customBackground = "/backgrounds/autumn-path.jpg";
+// Use BASE_URL-safe path so GitHub Pages subpath works
+const customBackground = new URL(
+  "/backgrounds/autumn-path.jpg",
+  import.meta.env.BASE_URL
+).pathname;
 const PARALLAX_FACTOR = 0.3; // smaller = subtler
 
 // --- DUMMY CONTENT ----
@@ -476,7 +480,7 @@ function App() {
         </Section>
       </main>
 
-         <MusicPlayer />
+      <MusicPlayer />
     </div>
   );
 }
@@ -485,9 +489,6 @@ export default App;
 export { App };
 
 // =====================================================
-// In-source tests (Vitest). Run with:
-//   npm i -D vitest && npx vitest run
-
 // In-source tests (Vitest). Run with:
 //   npm i -D vitest && npx vitest run
 // =====================================================
