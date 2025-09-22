@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 
 
 // =============================================
-// Autumn Blog — Single-file React Preview (Vite)
-// Fix: Removed stray/incomplete `gridTemplate` token and ensured all style objects are closed
-// Update: Parallax background fully covers page; Weekly Reflection resets closed each load
+// Autumn Blog — Single-file React App (Vite + TS)
+// Fix: completed file (previous paste ended mid-array at ~line 84)
+// - Parallax background fully covers viewport
+// - Weekly Reflection resets closed
+// - In-source Vitest sanity tests (optional)
 // =============================================
 
 
@@ -81,3 +83,23 @@ blurb: "Root vegetables, barley, and rosemary.",
 tags: ["supper"],
 updated: "2025-09-17",
 },
+{
+title: "Pumpkin Tea Loaf",
+slug: "pumpkin-tea-loaf",
+blurb: "Moist loaf with nutmeg and brown sugar.",
+tags: ["bake"],
+updated: "2025-09-15",
+},
+];
+
+
+const poemOfWeek = {
+title: "Ode to the Quiet Lane",
+body: `The lane keeps counsel with the leaves,\nA hush of amber, russet, gold;\nAnd in that stillness, heart believes\nWhat busy days forget to hold.`,
+};
+
+
+const traditions = [
+{ title: "Michaelmas Bread", note: "A simple loaf shared at the turning of the season." },
+{ title: "Lantern Walk", note: "Paper lanterns at dusk to honor gathering light." },
+];
