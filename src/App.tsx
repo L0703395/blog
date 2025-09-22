@@ -476,9 +476,18 @@ function App() {
         </Section>
       </main>
 
-      <MusicPlayer />
+         <MusicPlayer />
     </div>
-  );\n}\n\nexport default App;\nexport { App };\n\n// =====================================================
+  );
+}
+
+export default App;
+export { App };
+
+// =====================================================
+// In-source tests (Vitest). Run with:
+//   npm i -D vitest && npx vitest run
+
 // In-source tests (Vitest). Run with:
 //   npm i -D vitest && npx vitest run
 // =====================================================
