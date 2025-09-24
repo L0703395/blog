@@ -25,13 +25,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # no cache so no lockfile is needed
+          # no cache to avoid lockfile requirement
 
       - name: Install
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Build (force base path)
+        run: npm run build -- --base=/blog/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
