@@ -3,10 +3,9 @@ import { motion } from "framer-motion";
 
 // =============================================
 // Autumn Blog — Single-file React App (Vite + TS)
-// Fix: completed file (previous paste ended mid-array at ~line 84)
-// - Parallax background fully covers viewport
-// - Weekly Reflection resets closed
-// - In-source Vitest sanity tests (optional)
+// Update: Removed photo background & parallax.
+//         Using ornamental gradients only.
+//         Weekly Reflection resets closed.
 // =============================================
 
 // --- THEME ----
@@ -47,14 +46,6 @@ const LeafGraphic: React.FC<{ style?: React.CSSProperties }> = ({ style }) => (
   </svg>
 );
 
-// Use uploaded seasonal image (place file in /public/backgrounds)
-// Use BASE_URL-safe path so GitHub Pages subpath works
-const customBackground = new URL(
-  "/backgrounds/autumn-path.jpg",
-  import.meta.env.BASE_URL
-).pathname;
-const PARALLAX_FACTOR = 0.3; // smaller = subtler
-
 // --- DUMMY CONTENT ----
 const today = new Date().toISOString().slice(0, 10);
 const dailyWord = {
@@ -91,7 +82,10 @@ const recipeFeed = [
 
 const poemOfWeek = {
   title: "Ode to the Quiet Lane",
-  body: `The lane keeps counsel with the leaves,\nA hush of amber, russet, gold;\nAnd in that stillness, heart believes\nWhat busy days forget to hold.`,
+  body: `The lane keeps counsel with the leaves,
+A hush of amber, russet, gold;
+And in that stillness, heart believes
+What busy days forget to hold.`,
 };
 
 const traditions = [
@@ -174,6 +168,7 @@ const MusicPlayer: React.FC = () => {
   const [open, setOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
+
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
@@ -186,6 +181,10 @@ const MusicPlayer: React.FC = () => {
       a.removeEventListener("pause", onPause);
     };
   }, []);
+
+  // BASE_URL-safe music path (works on /blog/)
+  const musicUrl = new URL("/music/autumn-air.mp3", import.meta.env.BASE_URL).pathname;
+
   return (
     <div style={{ position: "fixed", right: 16, bottom: 16, zIndex: 50 }}>
       <button
@@ -223,7 +222,7 @@ const MusicPlayer: React.FC = () => {
               {playing ? "Pause" : "Play"}
             </button>
           </div>
-          <audio ref={audioRef} src="/music/autumn-air.mp3" preload="none" />
+          <audio ref={audioRef} src={musicUrl} preload="none" />
         </Card>
       )}
     </div>
@@ -231,9 +230,8 @@ const MusicPlayer: React.FC = () => {
 };
 
 // --- DROPDOWN WEEKLY REFLECTION ----
-// (Resets to closed on each load by design via useState(false) and no persistence.)
 const WeeklyReflection: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // resets closed each load
   return (
     <div style={{ marginTop: 6 }}>
       <button
@@ -265,48 +263,25 @@ const WeeklyReflection: React.FC = () => {
 // --- MAIN APP ----
 function App() {
   const [seasonGreeting, setSeasonGreeting] = useState<string>("");
-  // Parallax state
-  const [scrollY, setScrollY] = useState(0);
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY || window.pageYOffset || 0);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
-    const msg = "A blessed harvest to you";
-    setSeasonGreeting(msg);
+    setSeasonGreeting("A blessed harvest to you");
   }, []);
 
   return (
     <div
-      style={{ background: palette.bg, minHeight: "100vh", color: palette.ink, position: "relative" }}
+      style={{
+        background: palette.bg,
+        minHeight: "100vh",
+        color: palette.ink,
+        position: "relative",
+      }}
     >
-      {/* Parallax background image (oversized to avoid any gaps during translate) */}
-      <div
-        style={{
-          backgroundImage: `url(${customBackground})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center center",
-          backgroundAttachment: "scroll",
-          opacity: 0.25,
-          position: "fixed",
-          top: "-10vh",
-          left: 0,
-          width: "100%",
-          height: "120vh",
-          zIndex: 0,
-          transform: `translateY(${scrollY * PARALLAX_FACTOR}px)`,
-          willChange: "transform",
-        }}
-      />
       {/* Decorative SVG leaves */}
       <LeafGraphic style={{ top: "20%", left: "10%" }} />
       <LeafGraphic style={{ top: "70%", right: "15%", transform: "rotate(120deg)" }} />
 
-      {/* Ornamental top */}
+      {/* Ornamental header background */}
       <div
         style={{
           background: `radial-gradient(1200px 400px at 50% -50px, ${palette.gold}33, transparent 60%), linear-gradient(180deg, #FFF 0%, ${palette.bg} 100%)`,
@@ -474,8 +449,8 @@ function App() {
         <Section title="Colophon">
           <div style={{ ...serif, color: palette.accent2, fontSize: 14 }}>
             Built with React (Vite). Typography & colors evoke a vintage autumn
-            almanac. Background allows custom Canva image or SVG motifs. Replace
-            demo data with files under <code style={mono}>/content</code>.
+            almanac. Background uses ornamental gradients (no heavy images).
+            Replace demo data with files under <code style={mono}>/content</code>.
           </div>
         </Section>
       </main>
@@ -491,8 +466,6 @@ export { App };
 // =====================================================
 // In-source tests (Vitest). Run with:
 //   npm i -D vitest && npx vitest run
-// =====================================================
-
 declare global {
   interface ImportMeta {
     vitest?: {
@@ -523,15 +496,6 @@ if (typeof import.meta !== "undefined" && (import.meta as any).vitest) {
       expect(recipeFeed.length > 0).toBe(true);
       expect(traditions.length > 0).toBe(true);
       expect(hobbies.length > 0).toBe(true);
-    });
-
-    it("background path is set", () => {
-      expect(typeof customBackground).toBe("string");
-      expect(customBackground.length > 0).toBe(true);
-    });
-
-    it("parallax factor is reasonable", () => {
-      expect(PARALLAX_FACTOR > 0 && PARALLAX_FACTOR <= 0.5).toBe(true);
     });
   });
 }
