@@ -3,9 +3,8 @@ import { motion } from "framer-motion";
 
 // =============================================
 // Autumn Blog — Single-file React App (Vite + TS)
-// Update: Removed photo background & parallax.
-//         Using ornamental gradients only.
-//         Weekly Reflection resets closed.
+// Update: Removed photo/parallax background and BASE_URL issues; uses ornamental gradients only.
+//         Audio path made BASE_URL-safe. Simplified, smaller bundle.
 // =============================================
 
 // --- THEME ----
@@ -82,10 +81,7 @@ const recipeFeed = [
 
 const poemOfWeek = {
   title: "Ode to the Quiet Lane",
-  body: `The lane keeps counsel with the leaves,
-A hush of amber, russet, gold;
-And in that stillness, heart believes
-What busy days forget to hold.`,
+  body: `The lane keeps counsel with the leaves,\nA hush of amber, russet, gold;\nAnd in that stillness, heart believes\nWhat busy days forget to hold.`,
 };
 
 const traditions = [
@@ -168,7 +164,6 @@ const MusicPlayer: React.FC = () => {
   const [open, setOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
-
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
@@ -182,7 +177,7 @@ const MusicPlayer: React.FC = () => {
     };
   }, []);
 
-  // BASE_URL-safe music path (works on /blog/)
+  // BASE_URL-safe music path
   const musicUrl = new URL("/music/autumn-air.mp3", import.meta.env.BASE_URL).pathname;
 
   return (
@@ -230,8 +225,9 @@ const MusicPlayer: React.FC = () => {
 };
 
 // --- DROPDOWN WEEKLY REFLECTION ----
+// (Resets to closed on each load by design via useState(false) and no persistence.)
 const WeeklyReflection: React.FC = () => {
-  const [open, setOpen] = useState(false); // resets closed each load
+  const [open, setOpen] = useState(false);
   return (
     <div style={{ marginTop: 6 }}>
       <button
@@ -265,23 +261,19 @@ function App() {
   const [seasonGreeting, setSeasonGreeting] = useState<string>("");
 
   useEffect(() => {
-    setSeasonGreeting("A blessed harvest to you");
+    const msg = "A blessed harvest to you";
+    setSeasonGreeting(msg);
   }, []);
 
   return (
     <div
-      style={{
-        background: palette.bg,
-        minHeight: "100vh",
-        color: palette.ink,
-        position: "relative",
-      }}
+      style={{ background: palette.bg, minHeight: "100vh", color: palette.ink, position: "relative" }}
     >
       {/* Decorative SVG leaves */}
       <LeafGraphic style={{ top: "20%", left: "10%" }} />
       <LeafGraphic style={{ top: "70%", right: "15%", transform: "rotate(120deg)" }} />
 
-      {/* Ornamental header background */}
+      {/* Ornamental top */}
       <div
         style={{
           background: `radial-gradient(1200px 400px at 50% -50px, ${palette.gold}33, transparent 60%), linear-gradient(180deg, #FFF 0%, ${palette.bg} 100%)`,
@@ -466,6 +458,8 @@ export { App };
 // =====================================================
 // In-source tests (Vitest). Run with:
 //   npm i -D vitest && npx vitest run
+// =====================================================
+
 declare global {
   interface ImportMeta {
     vitest?: {
