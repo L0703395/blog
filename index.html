@@ -9,8 +9,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>A Journey Within — Notes from Solitude</title>
     <meta name="description" content="Autumnal notes on tradition, recipes, poems, and quiet crafts." />
+    <style>
+      /* diagnostic banner so we can see HTML rendered even if JS fails */
+      #preload-banner {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: #fefaf5;
+        color: #632223;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+        font-size: 18px;
+        z-index: 9999;
+      }
+      #preload-banner .msg { padding: 16px 20px; border: 1px dashed #feba51; border-radius: 10px; background: #fff; }
+    </style>
   </head>
   <body style="margin:0;">
+    <div id="preload-banner"><div class="msg">Loading Autumn Blog…</div></div>
     <div id="root"></div>
     <noscript>This site requires JavaScript to run.</noscript>
     <script type="module" src="/src/main.tsx"></script>
