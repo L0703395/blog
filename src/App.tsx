@@ -126,58 +126,6 @@ const Card: React.FC<{ children: React.ReactNode; onClick?: () => void }> = ({ c
   </motion.div>
 );
 
-// ---------- MUSIC ----------
-const MusicPlayer: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    const a = audioRef.current;
-    if (!a) return;
-    const onPlay = () => setPlaying(true);
-    const onPause = () => setPlaying(false);
-    a.addEventListener("play", onPlay);
-    a.addEventListener("pause", onPause);
-    return () => {
-      a.removeEventListener("play", onPlay);
-      a.removeEventListener("pause", onPause);
-    };
-  }, []);
-
-  const musicUrl = new URL("/music/autumn-air.mp3", import.meta.env.BASE_URL).pathname;
-
-  return (
-    <div style={{ position: "fixed", right: 16, bottom: 16, zIndex: 50 }}>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        title="Seasonal music"
-        style={{ background: palette.berry, color: "white", border: "none", borderRadius: 999, padding: "10px 14px", boxShadow: `0 4px 12px ${palette.berry}55`, fontSize: 14 }}
-      >
-        {open ? "✕" : "🎵"}
-      </button>
-      {open && (
-        <Card>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ fontSize: 14, ...serif }}>Autumn Air (demo)</div>
-            <button
-              onClick={() => {
-                const a = audioRef.current;
-                if (!a) return;
-                a.paused ? a.play() : a.pause();
-              }}
-              style={{ border: `1px solid ${palette.accent2}55`, background: "#fff", padding: "6px 10px", borderRadius: 8 }}
-            >
-              {playing ? "Pause" : "Play"}
-            </button>
-          </div>
-          <audio ref={audioRef} src={musicUrl} preload="none" />
-        </Card>
-      )}
-    </div>
-  );
-};
-
 // ---------- APP ----------
 function App() {
   const [seasonGreeting, setSeasonGreeting] = useState<string>("");
